@@ -28,5 +28,16 @@ public class PrimeiraController {
         return  "metodoComBodyParams " + usuario.username();
     }
 
+    @PostMapping("metodoComHeaders")
+    public String metodoComHeaders(@RequestHeader ("name") String name){
+        return  "metodoComHeaders " + name;
+    }
+
+    @PostMapping("metodoComListHeaders")
+    public String metodoComListHeaders(@RequestHeader  Map<String,String> headers){
+        return  "metodoComHeaders " + headers.entrySet();
+    }
+
+
     record Usuario(String username){}
 }
