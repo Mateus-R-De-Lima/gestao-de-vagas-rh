@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Objects;
 
 @RestController //utilizamos a annotation @RestController para indicar que a classe é um Controller e que estamos construindo uma API REST.
 @RequestMapping("/primeiraController") //utilizamos a annotation @RequestMapping para definir o recurso da rota
@@ -46,7 +45,6 @@ public class PrimeiraController {
         var usuario = new Usuario("mateus");
         if(id>5){
             return  ResponseEntity.status(HttpStatus.OK).body(usuario);
-
         }
         return ResponseEntity.badRequest().body("Numero menor que 5");
     }
