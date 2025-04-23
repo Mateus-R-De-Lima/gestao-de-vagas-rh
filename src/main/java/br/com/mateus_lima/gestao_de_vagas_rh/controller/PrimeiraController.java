@@ -1,8 +1,11 @@
 package br.com.mateus_lima.gestao_de_vagas_rh.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Objects;
 
 @RestController //utilizamos a annotation @RestController para indicar que a classe é um Controller e que estamos construindo uma API REST.
 @RequestMapping("/primeiraController") //utilizamos a annotation @RequestMapping para definir o recurso da rota
@@ -36,6 +39,16 @@ public class PrimeiraController {
     @PostMapping("metodoComListHeaders")
     public String metodoComListHeaders(@RequestHeader  Map<String,String> headers){
         return  "metodoComHeaders " + headers.entrySet();
+    }
+
+    @GetMapping("/metodoResponseEntity/{id}")
+    public ResponseEntity<Object> metodoResponseEntity(@PathVariable Long id){
+        var usuario = new Usuario("mateus");
+        if(id>5){
+            return  ResponseEntity.status(HttpStatus.OK).body(usuario);
+
+        }
+        return ResponseEntity.badRequest().body("Numero menor que 5");
     }
 
 
