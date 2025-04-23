@@ -16,10 +16,17 @@ public class PrimeiraController {
     @GetMapping("/metodoComQueryParams")
 
     public  String metodoComQuaryParamas(@RequestParam String id){
-        return "O paramétro com metodoComQueryParams é " +id;
+        return "O paramétro com metodoComQueryParams é " + id;
     }
     @GetMapping("/metodoComQueryParams2")
     public  String metodoComQuaryParamas2(@RequestParam Map<String,String> allParams){
         return "O paramétro com metodoComQueryParams 2 é " + allParams.entrySet();
     }
+
+    @PostMapping("metodoComBodyParams")
+    public String metodoComBodyParams(@RequestBody Usuario usuario){
+        return  "metodoComBodyParams " + usuario.username();
+    }
+
+    record Usuario(String username){}
 }
