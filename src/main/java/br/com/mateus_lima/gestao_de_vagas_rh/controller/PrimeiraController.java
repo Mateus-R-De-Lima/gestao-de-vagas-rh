@@ -1,4 +1,4 @@
-package br.com.mateus_lima.gestao_de_vagas_rh;
+package br.com.mateus_lima.gestao_de_vagas_rh.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
