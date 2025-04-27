@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("cancidate")
+@RequestMapping("/candidate")
 public class CandidateController {
     @Autowired
     CreateCandidateUseCase createCandidateUseCase;
