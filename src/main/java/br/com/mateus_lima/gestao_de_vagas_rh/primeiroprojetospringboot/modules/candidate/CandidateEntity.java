@@ -24,7 +24,7 @@ public class CandidateEntity {
     private  String username;
     @Email(message = "Não foi possível validar o e-mail. Verifique se está completo e corretamente digitado.")
     private  String email;
-    @Length(min = 6, max = 50, message = "Por favor, insira uma senha válida (entre 6 e 50 caracteres)")
+    @Length(min = 6, max = 150, message = "Por favor, insira uma senha válida (entre 6 e 150 caracteres)")
     private  String password;
     private  String description;
     private  String curriculum;
