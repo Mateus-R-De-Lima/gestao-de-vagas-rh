@@ -2,7 +2,10 @@ package br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.
 
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.company.dto.AuthCompanyDTO;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.company.repositories.CompanyRepository;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,7 +13,10 @@ import org.springframework.stereotype.Service;
 import javax.naming.AuthenticationException;
 
 @Service
-public class AuthenticateCompanyUseCase  {
+public class AuthCompanyUseCase {
+
+    @Value("${security.algorithm-key}")
+    private String securityKey;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -18,7 +24,7 @@ public class AuthenticateCompanyUseCase  {
     @Autowired
     private CompanyRepository companyRepository;
 
-    public void execute(AuthCompanyDTO authCompanyDTO) throws  AuthenticationException {
+    public String execute(AuthCompanyDTO authCompanyDTO) throws  AuthenticationException {
         var company = this.companyRepository
                 .findByUsername(authCompanyDTO.getUsername())
                 .orElseThrow( () ->{
@@ -33,7 +39,15 @@ public class AuthenticateCompanyUseCase  {
             throw new AuthenticationException();
         }
 
-        //Retornar
+        //Retornar o JWT
+
+        Algorithm algorithm = Algorithm.HMAC256(securityKey);
+       var token = JWT.create()
+                .withIssuer("java-vagas")
+                .withSubject(company.getId().toString())
+                .sign(algorithm);
+
+        return token;
     }
 
 }
