@@ -18,13 +18,13 @@ public class AuthCompanyController {
     private AuthCompanyUseCase authCompanyUseCase;
 
     @PostMapping("/company")
-    public ResponseEntity<Object> create(@RequestBody AuthCompanyDTO request){
+    public ResponseEntity<Object> create(@RequestBody AuthCompanyDTO request) {
         try {
             var token = authCompanyUseCase.execute(request);
             return ResponseEntity.ok().body(token);
 
-        }catch (Exception ex){
-                return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
         }
 
 

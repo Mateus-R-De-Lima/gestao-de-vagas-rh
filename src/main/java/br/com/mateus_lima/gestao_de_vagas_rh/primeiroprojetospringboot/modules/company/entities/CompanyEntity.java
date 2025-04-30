@@ -19,15 +19,15 @@ public class CompanyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private  String name;
+    private String name;
     @Pattern(regexp = "\\S+", message = "O campo username não deve conter espaços")
-    private  String username;
+    private String username;
     @Email(message = "Não foi possível validar o e-mail. Verifique se está completo e corretamente digitado.")
-    private  String email;
+    private String email;
     @Length(min = 6, max = 150, message = "Por favor, insira uma senha válida (entre 6 e 150 caracteres)")
-    private  String password;
+    private String password;
     private String website;
-    private  String description;
+    private String description;
     @CreationTimestamp
     private LocalDateTime createAt;
 
