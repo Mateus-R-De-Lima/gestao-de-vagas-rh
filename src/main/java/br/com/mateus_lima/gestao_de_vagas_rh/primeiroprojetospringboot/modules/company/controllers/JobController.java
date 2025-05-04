@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,8 @@ public class JobController {
     @Autowired
     private CreateJobUseCase createJobUseCase;
 
+
+
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody JobDTO jobDTO, HttpServletRequest request) {
         try {
@@ -33,6 +36,8 @@ public class JobController {
                     .description(jobDTO.getBenifits())
                     .companyId(UUID.fromString(companyId.toString()))
                     .build();
+
+
 
             var result = this.createJobUseCase.execute(jobEntity);
             return ResponseEntity.ok().body(result);

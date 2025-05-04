@@ -6,6 +6,7 @@ import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.c
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,13 +19,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/candidate")
 public class CandidateController {
+
     @Autowired
     CreateCandidateUseCase createCandidateUseCase;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity request){
         try {
+            var password = passwordEncoder.encode(request.getPassword());
+            request.setPassword(password);
             var result = this.createCandidateUseCase.execute(request);
             return  ResponseEntity.ok().body(result);
         }catch (Exception e){
