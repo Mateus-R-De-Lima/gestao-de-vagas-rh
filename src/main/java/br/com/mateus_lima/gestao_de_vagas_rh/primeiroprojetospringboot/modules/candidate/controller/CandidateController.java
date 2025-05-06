@@ -29,8 +29,6 @@ public class CandidateController {
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity request){
         try {
-            var password = passwordEncoder.encode(request.getPassword());
-            request.setPassword(password);
             var result = this.createCandidateUseCase.execute(request);
             return  ResponseEntity.ok().body(result);
         }catch (Exception e){

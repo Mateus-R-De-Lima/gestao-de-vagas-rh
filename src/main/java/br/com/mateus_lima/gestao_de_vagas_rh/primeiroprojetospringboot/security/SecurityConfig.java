@@ -29,7 +29,7 @@ public class SecurityConfig {
                 // Define as regras de autorização para cada endpoint
                 .authorizeHttpRequests(auth -> {
                     // Libera o acesso público (sem autenticação) para as rotas de cadastro e autenticação
-                    auth.requestMatchers("/candidate/", "/company/", "/auth/company").permitAll();
+                    auth.requestMatchers("/candidate/", "/company/", "/auth/company","/auth/candidate").permitAll();
 
                     // Qualquer outra requisição deve ser autenticada
                     auth.anyRequest().authenticated();
