@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -42,20 +43,22 @@ public class SecurityFilter extends OncePerRequestFilter {
             // Se o cabeçalho Authorization estiver presente
             if(header != null){
                 // Valida o token com o JWTProvider (retorna o "subject", ou seja, a identificação do usuário/empresa)
-                var subjectToken = this.jwtProvider.validateToken(header);
+                var token = this.jwtProvider.validateToken(header);
 
                 // Se o token for inválido (não contém subject), retorna erro 401 (Não autorizado)
-                if(subjectToken.isEmpty()){
+                if(token == null){
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
 
                 // Se o token for válido, adiciona o ID da empresa como atributo na requisição
-                request.setAttribute("company_id", subjectToken);
+                request.setAttribute("company_id", token.getSubject());
+                var roles = token.getClaim("roles").asList(Object.class);
+                var grants = roles.stream().map( role -> new SimpleGrantedAuthority("ROLE_"+role.toString())).toList();
 
                 // Cria um objeto de autenticação do Spring Security com o subject do token
                 UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(subjectToken, null, Collections.emptyList());
+                        new UsernamePasswordAuthenticationToken(token.getSubject(), null, grants);
 
                 // Define a autenticação no contexto de segurança para esta requisição
                 SecurityContextHolder.getContext().setAuthentication(auth);

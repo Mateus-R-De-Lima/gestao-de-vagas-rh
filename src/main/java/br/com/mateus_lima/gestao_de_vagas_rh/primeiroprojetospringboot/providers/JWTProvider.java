@@ -3,6 +3,7 @@ package br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.provider
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class JWTProvider {
      * Se o token for válido, retorna o "subject" (informação principal do token, como o ID ou email).
      * Se for inválido, retorna uma string vazia.
      */
-    public String validateToken(String token) {
+    public DecodedJWT validateToken(String token) {
         // Remove o prefixo "Bearer " do token, caso esteja presente no cabeçalho Authorization
         token = token.replace("Bearer ", "");
 
@@ -27,16 +28,15 @@ public class JWTProvider {
 
         try {
             // Verifica se o token é válido com base no algoritmo e na assinatura
-            var subject = JWT.require(algorithm)
+            var tokenDecoded = JWT.require(algorithm)
                     .build()
-                    .verify(token)
-                    .getSubject(); // Recupera o "subject" que foi definido na criação do token (ex: company_id)
+                    .verify(token);
 
-            return subject; // Se tudo ocorrer bem, retorna o subject (identificação do dono do token)
+            return tokenDecoded; // Se tudo ocorrer bem, retorna o subject (identificação do dono do token)
         } catch (JWTVerificationException ex) {
             // Caso o token seja inválido ou expirado, imprime o erro e retorna string vazia
             ex.printStackTrace(); // Em produção, o ideal é logar de forma segura e não exibir pilhas
-            return "";
+            return null;
         }
     }
 }
