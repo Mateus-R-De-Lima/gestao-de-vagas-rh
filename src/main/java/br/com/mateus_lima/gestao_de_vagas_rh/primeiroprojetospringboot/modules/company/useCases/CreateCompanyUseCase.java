@@ -21,7 +21,7 @@ public class CreateCompanyUseCase {
         this.companyRepository
                 .findByUsernameOrEmail(request.getUsername(),request.getEmail())
                 .ifPresent((user) ->{
-                    throw new UserAlreadyExistsExeption();
+                    throw new UserAlreadyExistsExeption("Empresa não localizada.");
                 });
 
         var password = passwordEncoder.encode(request.getPassword());

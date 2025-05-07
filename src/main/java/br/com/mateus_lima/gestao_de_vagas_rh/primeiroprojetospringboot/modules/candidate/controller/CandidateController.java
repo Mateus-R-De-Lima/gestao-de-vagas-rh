@@ -3,17 +3,17 @@ package br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.exceptions.ErrorMessageDTO;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.CandidateEntity;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase.CreateCandidateUseCase;
+import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase.ProfileCandidateUseCase;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -22,6 +22,9 @@ public class CandidateController {
 
     @Autowired
     CreateCandidateUseCase createCandidateUseCase;
+
+    @Autowired
+    ProfileCandidateUseCase profileCandidateUseCase;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -40,5 +43,17 @@ public class CandidateController {
 
             return ResponseEntity.badRequest().body(errorMessageDTO);
         }
+    }
+
+    @GetMapping("/profile")
+    public  ResponseEntity<Object> get(HttpServletRequest request){
+        var idCandidate =  request.getAttribute("candidate_id").toString();
+        try {
+            var profile = this.profileCandidateUseCase.execute(UUID.fromString(idCandidate));
+            return ResponseEntity.ok().body(profile);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 }

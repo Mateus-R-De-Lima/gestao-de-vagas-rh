@@ -38,26 +38,28 @@ public class SecurityFilter extends OncePerRequestFilter {
         // Garante que o contexto de segurança seja limpo antes de qualquer verificação
         SecurityContextHolder.getContext().setAuthentication(null);
 
-        // Se o cabeçalho Authorization estiver presente
-        if(header != null){
-            // Valida o token com o JWTProvider (retorna o "subject", ou seja, a identificação do usuário/empresa)
-            var subjectToken = this.jwtProvider.validateToken(header);
+        if(request.getRequestURI().startsWith("/company")){
+            // Se o cabeçalho Authorization estiver presente
+            if(header != null){
+                // Valida o token com o JWTProvider (retorna o "subject", ou seja, a identificação do usuário/empresa)
+                var subjectToken = this.jwtProvider.validateToken(header);
 
-            // Se o token for inválido (não contém subject), retorna erro 401 (Não autorizado)
-            if(subjectToken.isEmpty()){
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
+                // Se o token for inválido (não contém subject), retorna erro 401 (Não autorizado)
+                if(subjectToken.isEmpty()){
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
+
+                // Se o token for válido, adiciona o ID da empresa como atributo na requisição
+                request.setAttribute("company_id", subjectToken);
+
+                // Cria um objeto de autenticação do Spring Security com o subject do token
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(subjectToken, null, Collections.emptyList());
+
+                // Define a autenticação no contexto de segurança para esta requisição
+                SecurityContextHolder.getContext().setAuthentication(auth);
             }
-
-            // Se o token for válido, adiciona o ID da empresa como atributo na requisição
-            request.setAttribute("company_id", subjectToken);
-
-            // Cria um objeto de autenticação do Spring Security com o subject do token
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(subjectToken, null, Collections.emptyList());
-
-            // Define a autenticação no contexto de segurança para esta requisição
-            SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
         // Passa a requisição adiante na cadeia de filtros

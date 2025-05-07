@@ -16,14 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/job")
+@RequestMapping("/company/job")
 public class JobController {
 
     @Autowired
     private CreateJobUseCase createJobUseCase;
-
-
-
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody JobDTO jobDTO, HttpServletRequest request) {
         try {
@@ -34,7 +31,7 @@ public class JobController {
                     .benifits(jobDTO.getBenifits())
                     .level(jobDTO.getLevel())
                     .description(jobDTO.getBenifits())
-                    .companyId(UUID.fromString(companyId.toString()))
+                    .companyId(UUID.fromString(companyId))
                     .build();
 
 

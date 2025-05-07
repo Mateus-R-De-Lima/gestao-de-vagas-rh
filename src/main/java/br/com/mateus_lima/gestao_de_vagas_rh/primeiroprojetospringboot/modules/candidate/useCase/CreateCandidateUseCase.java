@@ -20,7 +20,7 @@ public class CreateCandidateUseCase {
         candidateRepository
                 .findByUsernameOrEmail(request.getUsername(),request.getEmail())
                 .ifPresent((user) ->{
-                    throw new UserAlreadyExistsExeption();
+                    throw new UserAlreadyExistsExeption("Candidato não encontrado");
                 });
         // Codificar a Senha
         var password = passwordEncoder.encode(request.getPassword());
