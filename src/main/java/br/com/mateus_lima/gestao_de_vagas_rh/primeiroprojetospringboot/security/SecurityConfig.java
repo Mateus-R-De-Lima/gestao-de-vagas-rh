@@ -3,6 +3,7 @@ package br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.security
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     // Injeta o filtro personalizado que você criou para validar o token JWT
@@ -32,7 +34,7 @@ public class SecurityConfig {
                 // Define as regras de autorização para cada endpoint
                 .authorizeHttpRequests(auth -> {
                     // Libera o acesso público (sem autenticação) para as rotas de cadastro e autenticação
-                    auth.requestMatchers("/candidate/**", "/company/**", "/auth/company", "/auth/candidate").permitAll();
+                    auth.requestMatchers("/candidate/", "/company/", "/auth/**").permitAll();
 
                     // Qualquer outra requisição deve ser autenticada
                     auth.anyRequest().authenticated();

@@ -36,7 +36,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
 
         // Garante que o contexto de segurança seja limpo antes de qualquer verificação
-        SecurityContextHolder.getContext().setAuthentication(null);
+        //SecurityContextHolder.getContext().setAuthentication(null);
 
         if(request.getRequestURI().startsWith("/company")){
             // Se o cabeçalho Authorization estiver presente
