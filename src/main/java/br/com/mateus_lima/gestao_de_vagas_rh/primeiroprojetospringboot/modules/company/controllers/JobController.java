@@ -32,7 +32,7 @@ public class JobController {
             var jobEntity = JobEntity.builder()
                     .benifits(jobDTO.getBenifits())
                     .level(jobDTO.getLevel())
-                    .description(jobDTO.getBenifits())
+                    .description(jobDTO.getDescription())
                     .companyId(UUID.fromString(companyId))
                     .build();
 

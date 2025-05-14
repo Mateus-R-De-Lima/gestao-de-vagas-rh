@@ -3,7 +3,9 @@ package br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.exceptions.ErrorMessageDTO;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.CandidateEntity;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase.CreateCandidateUseCase;
+import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase.ListAllJobsByFilterUseCase;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase.ProfileCandidateUseCase;
+import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.company.entities.JobEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class CandidateController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
 
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity request){
@@ -57,5 +62,11 @@ public class CandidateController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
+    }
+
+    @GetMapping("/job")
+    @PreAuthorize("hasRole('candidate')")
+    public List<JobEntity> findJobByFilter(@RequestParam String filter){
+        return this.listAllJobsByFilterUseCase.execute(filter);
     }
 }
