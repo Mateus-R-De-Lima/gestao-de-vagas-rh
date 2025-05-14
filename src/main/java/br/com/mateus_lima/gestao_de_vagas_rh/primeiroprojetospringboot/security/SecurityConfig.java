@@ -21,6 +21,12 @@ public class SecurityConfig {
     @Autowired
     private SecurityCandidateFilter securityCandidateFilter;
 
+    private static final String[] SWAGGER_LIST = {
+         "/swagger-ui/**" ,
+         "/v3/api-docs/**",
+          "/swagger-resources/**"
+    };
+
     /**
      * Configura a cadeia de filtros de segurança do Spring Security.
      * Define o que precisa ou não de autenticação e adiciona o filtro JWT.
@@ -35,6 +41,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     // Libera o acesso público (sem autenticação) para as rotas de cadastro e autenticação
                     auth.requestMatchers("/candidate/", "/company/", "/auth/**").permitAll();
+
+                    auth.requestMatchers(SWAGGER_LIST).permitAll();
 
                     // Qualquer outra requisição deve ser autenticada
                     auth.anyRequest().authenticated();
