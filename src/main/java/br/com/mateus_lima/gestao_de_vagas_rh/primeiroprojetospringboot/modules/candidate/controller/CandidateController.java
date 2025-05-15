@@ -2,6 +2,7 @@ package br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.
 
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.exceptions.ErrorMessageDTO;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.CandidateEntity;
+import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.dto.ProfileCandidateResponseDTO;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase.CreateCandidateUseCase;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase.ListAllJobsByFilterUseCase;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase.ProfileCandidateUseCase;
@@ -61,6 +62,18 @@ public class CandidateController {
 
     @GetMapping("/profile")
     @PreAuthorize("hasRole('candidate')")
+    @Tag(name = "Candidato",description = "Descrição do Candidato")
+    @Operation(summary = "Dados do candidato", description = "Informações referente ao candidato")
+    @ApiResponses(
+            {
+                    @ApiResponse(responseCode = "200",content = {
+                            @Content(schema = @Schema(implementation = ProfileCandidateResponseDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "400",description = "Candidato não encontrado.")
+            }
+    )
+
+    @SecurityRequirement(name = "jwt_auth")
     public  ResponseEntity<Object> get(HttpServletRequest request){
         var idCandidate =  request.getAttribute("candidate_id").toString();
         try {
