@@ -30,6 +30,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/candidate")
+@Tag(name = "Candidato",description = "Descrição do Candidato")
 public class CandidateController {
 
     @Autowired
@@ -45,6 +46,15 @@ public class CandidateController {
     ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
 
     @PostMapping("/")
+    @Operation(summary = "Criar candidato", description = "Cadastra um novo candidato")
+    @ApiResponses(
+            {
+                    @ApiResponse(responseCode = "200",content = {
+                            @Content(schema = @Schema(implementation = ProfileCandidateResponseDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "400",description = "Candidato já foi cadastrado.")
+            }
+    )
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity request){
         try {
             var result = this.createCandidateUseCase.execute(request);
@@ -62,7 +72,6 @@ public class CandidateController {
 
     @GetMapping("/profile")
     @PreAuthorize("hasRole('candidate')")
-    @Tag(name = "Candidato",description = "Descrição do Candidato")
     @Operation(summary = "Dados do candidato", description = "Informações referente ao candidato")
     @ApiResponses(
             {

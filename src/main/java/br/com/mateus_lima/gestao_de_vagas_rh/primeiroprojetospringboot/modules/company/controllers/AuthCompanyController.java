@@ -2,6 +2,7 @@ package br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.
 
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.company.dto.AuthCompanyDTO;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.company.useCases.AuthCompanyUseCase;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "auth",description = "Autenticação")
 public class AuthCompanyController {
 
     @Autowired
