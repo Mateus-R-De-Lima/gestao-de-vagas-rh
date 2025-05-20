@@ -3,6 +3,7 @@ package br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.exceptions.JobNotFoundException;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.exceptions.UserNotFoundException;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.CandidateRepository;
+import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.repositories.ApplyJobCandidateRepository;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.company.repositories.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class ApplyJobCandidateUseCase {
 
     @Autowired
     private JobRepository jobRepository;
+
+    @Autowired
+    private ApplyJobCandidateRepository applyJobCandidateRepository;
 
     // ID do candidato
     // ID da vaga
