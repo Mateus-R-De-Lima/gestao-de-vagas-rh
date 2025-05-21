@@ -3,6 +3,7 @@ package br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.exceptions.ErrorMessageDTO;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.CandidateEntity;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.dto.ProfileCandidateResponseDTO;
+import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase.ApplyJobCandidateUseCase;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase.CreateCandidateUseCase;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase.ListAllJobsByFilterUseCase;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase.ProfileCandidateUseCase;
@@ -30,7 +31,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/candidate")
-@Tag(name = "Candidato",description = "Descrição do Candidato")
+@Tag(name = "Candidato", description = "Descrição do Candidato")
 public class CandidateController {
 
     @Autowired
@@ -38,6 +39,9 @@ public class CandidateController {
 
     @Autowired
     ProfileCandidateUseCase profileCandidateUseCase;
+
+    @Autowired
+    ApplyJobCandidateUseCase applyJobCandidateUseCase;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -49,17 +53,17 @@ public class CandidateController {
     @Operation(summary = "Criar candidato", description = "Cadastra um novo candidato")
     @ApiResponses(
             {
-                    @ApiResponse(responseCode = "200",content = {
+                    @ApiResponse(responseCode = "200", content = {
                             @Content(schema = @Schema(implementation = ProfileCandidateResponseDTO.class))
                     }),
-                    @ApiResponse(responseCode = "400",description = "Candidato já foi cadastrado.")
+                    @ApiResponse(responseCode = "400", description = "Candidato já foi cadastrado.")
             }
     )
-    public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity request){
+    public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity request) {
         try {
             var result = this.createCandidateUseCase.execute(request);
-            return  ResponseEntity.ok().body(result);
-        }catch (Exception e){
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
             List<ErrorMessageDTO> errorMessageDTO = new ArrayList<>(); // Lista para armazenar mensagens de erro personalizadas
 
             String field = "Status : " + 400;
@@ -75,20 +79,20 @@ public class CandidateController {
     @Operation(summary = "Dados do candidato", description = "Informações referente ao candidato")
     @ApiResponses(
             {
-                    @ApiResponse(responseCode = "200",content = {
+                    @ApiResponse(responseCode = "200", content = {
                             @Content(schema = @Schema(implementation = ProfileCandidateResponseDTO.class))
                     }),
-                    @ApiResponse(responseCode = "400",description = "Candidato não encontrado.")
+                    @ApiResponse(responseCode = "400", description = "Candidato não encontrado.")
             }
     )
 
     @SecurityRequirement(name = "jwt_auth")
-    public  ResponseEntity<Object> get(HttpServletRequest request){
-        var idCandidate =  request.getAttribute("candidate_id").toString();
+    public ResponseEntity<Object> get(HttpServletRequest request) {
+        var idCandidate = request.getAttribute("candidate_id").toString();
         try {
             var profile = this.profileCandidateUseCase.execute(UUID.fromString(idCandidate));
             return ResponseEntity.ok().body(profile);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
@@ -96,11 +100,11 @@ public class CandidateController {
 
     @GetMapping("/job")
     @PreAuthorize("hasRole('candidate')")
-    @Tag(name = "Candidato",description = "Descrição da Vaga")
+    @Tag(name = "Candidato", description = "Descrição da Vaga")
     @Operation(summary = "Listagem de vagas disponíveis para o candidato.", description = "Listagem de vagas")
     @ApiResponses(
             {
-                    @ApiResponse(responseCode = "200",content = {
+                    @ApiResponse(responseCode = "200", content = {
                             @Content(array = @ArraySchema(
                                     schema = @Schema(implementation = JobEntity.class)
                             ))
@@ -108,7 +112,28 @@ public class CandidateController {
             }
     )
     @SecurityRequirement(name = "jwt_auth")
-    public List<JobEntity> findJobByFilter(@RequestParam String filter){
+    public List<JobEntity> findJobByFilter(@RequestParam String filter) {
         return this.listAllJobsByFilterUseCase.execute(filter);
+    }
+
+
+    @PostMapping("/job/apply")
+    @PreAuthorize("hasRole('candidate')")
+    @Tag(name = "Candidato")
+    @Operation(summary = "Inscrição do candidado para uma vaga", description = "Essa função é responsável por realiza a inscrição do candidato em uma vaga")
+    @SecurityRequirement(name = "jwt_auth")
+    public ResponseEntity<Object> applyJob(HttpServletRequest request, @RequestBody UUID idJob) {
+
+        try {
+            var idCandidate = request.getAttribute("candidate_id").toString();
+
+            var result = applyJobCandidateUseCase.execute(UUID.fromString(idCandidate), idJob);
+
+            return ResponseEntity.ok().body(result);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 }
