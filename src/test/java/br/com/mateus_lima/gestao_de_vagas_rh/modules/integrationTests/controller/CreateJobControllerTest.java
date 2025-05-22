@@ -2,6 +2,8 @@ package br.com.mateus_lima.gestao_de_vagas_rh.modules.integrationTests.controlle
 
 
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.GestaoDeVagasRhApplication;
+import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.exceptions.CompanyNotFoundException;
+import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.exceptions.UserNotFoundException;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.company.dto.JobDTO;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.company.entities.CompanyEntity;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.company.repositories.CompanyRepository;
@@ -27,6 +29,7 @@ import java.util.UUID;
 
 import static br.com.mateus_lima.gestao_de_vagas_rh.modules.utils.TestsUtils.objectToString;
 import static br.com.mateus_lima.gestao_de_vagas_rh.modules.utils.TestsUtils.toToken;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = GestaoDeVagasRhApplication.class)
@@ -63,6 +66,14 @@ public class CreateJobControllerTest {
 
         companyRepository.saveAndFlush(company);
 
+
+
+
+    }
+
+    @Test
+    public  void should_be_able_not_create_a_new_job_if_company_not_found() throws Exception {
+
         var createJobDTO = JobDTO.builder()
                 .description("Descrição de Testes")
                 .level("Testes")
@@ -73,10 +84,8 @@ public class CreateJobControllerTest {
         mvc.perform(MockMvcRequestBuilders.post("/company/job/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectToString(createJobDTO))
-                .header("Authorization", toToken(company.getId(),securityKey))
-        ).andExpect(MockMvcResultMatchers.status().isOk());
-
-
+                .header("Authorization", toToken(UUID.randomUUID(),securityKey))
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
 
