@@ -1,6 +1,7 @@
 package br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.useCase;
 
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.exceptions.UserAlreadyExistsExeption;
+import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.exceptions.UserNotFoundException;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.CandidateRepository;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.modules.candidate.dto.ProfileCandidateResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class ProfileCandidateUseCase {
     public ProfileCandidateResponseDTO  execute(UUID idCandidate){
 
         var candidate = this.candidateRepository.findById(idCandidate).orElseThrow(() ->{
-           throw new UserAlreadyExistsExeption("Candidato não encontrado.");
+           throw new UserNotFoundException("Candidato não encontrado.");
         });
 
         return ProfileCandidateResponseDTO.builder()

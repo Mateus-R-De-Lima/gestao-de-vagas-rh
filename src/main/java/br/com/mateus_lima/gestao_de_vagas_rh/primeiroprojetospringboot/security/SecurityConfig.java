@@ -16,7 +16,7 @@ public class SecurityConfig {
 
     // Injeta o filtro personalizado que você criou para validar o token JWT
     @Autowired
-    private SecurityFilter securityFilter;
+    private SecurityCompanyFilter securityCompanyFilter;
 
     @Autowired
     private SecurityCandidateFilter securityCandidateFilter;
@@ -50,7 +50,7 @@ public class SecurityConfig {
 
                 // Adiciona o filtro JWT antes do filtro padrão de autenticação (BasicAuthenticationFilter)
                 .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
-                .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
+                .addFilterBefore(securityCompanyFilter, BasicAuthenticationFilter.class);
 
 
 
