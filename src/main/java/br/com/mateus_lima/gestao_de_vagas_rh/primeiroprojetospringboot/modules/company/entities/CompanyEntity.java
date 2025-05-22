@@ -6,7 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.Length;
 
@@ -15,6 +18,9 @@ import java.util.UUID;
 
 @Entity(name = "Companies")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CompanyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

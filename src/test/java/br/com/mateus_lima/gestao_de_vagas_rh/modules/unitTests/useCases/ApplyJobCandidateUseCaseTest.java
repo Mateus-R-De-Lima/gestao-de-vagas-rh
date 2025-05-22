@@ -1,4 +1,4 @@
-package br.com.mateus_lima.gestao_de_vagas_rh.modules.useCases;
+package br.com.mateus_lima.gestao_de_vagas_rh.modules.unitTests.useCases;
 
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.exceptions.JobNotFoundException;
 import br.com.mateus_lima.gestao_de_vagas_rh.primeiroprojetospringboot.exceptions.UserNotFoundException;
