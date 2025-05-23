@@ -21,10 +21,11 @@ public class SecurityConfig {
     @Autowired
     private SecurityCandidateFilter securityCandidateFilter;
 
-    private static final String[] SWAGGER_LIST = {
+    private static final String[] PERMIT_ALL_LIST = {
          "/swagger-ui/**" ,
          "/v3/api-docs/**",
-          "/swagger-resources/**"
+         "/swagger-resources/**",
+          "/actuator/**"
     };
 
     /**
@@ -42,7 +43,7 @@ public class SecurityConfig {
                     // Libera o acesso público (sem autenticação) para as rotas de cadastro e autenticação
                     auth.requestMatchers("/candidate/", "/company/", "/auth/**").permitAll();
 
-                    auth.requestMatchers(SWAGGER_LIST).permitAll();
+                    auth.requestMatchers(PERMIT_ALL_LIST).permitAll();
 
                     // Qualquer outra requisição deve ser autenticada
                     auth.anyRequest().authenticated();
