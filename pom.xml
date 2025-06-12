@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.mateus-lima</groupId>
 	<artifactId>gestao-de-vagas-rh</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>gestao-de-vagas-rh</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
