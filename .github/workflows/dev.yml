@@ -17,3 +17,12 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+      - name: Build project
+        run: mvn clean install
+      - name: Login docker
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+      - name: Build docker image
+        run: docker build -t limamateus/gestao_vagas .
+      - name: publish image
+        run: docker push limamateus/gestao_vagas
+
