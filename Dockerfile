@@ -11,5 +11,4 @@ FROM openjdk:17-jdk-slim
 EXPOSE 8080
 
 COPY --from=build /target/gestao-de-vagas-rh-0.0.1.jar app.jar
-
-ENTRYPOINT ["java","-jav","app.jar"]
+ENTRYPOINT ["java", "-Xms128m", "-Xmx512m", "-jar", "app.jar"]
